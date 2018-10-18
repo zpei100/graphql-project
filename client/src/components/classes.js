@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { GET_CLASSES } from '../query/query';
 import { ApolloConsumer, Query } from 'react-apollo';
 
+
 export class Classes extends Component {
   render() {
     return (
