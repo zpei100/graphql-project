@@ -28,6 +28,8 @@ const fakeStudentData = [
   { id: 9, age: 19, name: 'kyle' }
 ];
 
+//populate database: 
+
 // fakeStudentData.forEach(student => {
 //   new Students({ id: student.id, age: student.age, name: student.name }).save();
 // });
@@ -45,11 +47,7 @@ const student = new GraphQLObjectType({
     classes: {
       type: new GraphQLList(cls),
       resolve: function(parent, args) {
-        return new Promise(function(resolve, reject) {
-          Classes.find({}, function(err, data) {
-            resolve(data.filter((cls) => cls.roster.includes(parent.id)));
-          })
-        })
+        Classes.find({roster: parent.id});
       }
     }
   })
@@ -64,12 +62,7 @@ const cls = new GraphQLObjectType({
     students: {
       type: new GraphQLList(student),
       resolve: function(parent, args) {
-        return new Promise(function(resolve, reject) {
-          Students.find({}, function(err, students) {
-            console.log('students found: ', students)
-            resolve (students.filter(student => parent.roster.includes(student.id)));
-          })
-        })
+        return Students.find().where('id').in(parent.roster)
       }
     }
   })
@@ -95,11 +88,7 @@ const RootQuery = new GraphQLObjectType({
         id: { type: GraphQLInt }
       },
       resolve: (parent, args) => {
-        return new Promise(function (resolve, reject) {
-          Students.find({id: args.id},function(err, data) {
-            resolve(data[0])
-          })
-        }) 
+        return Students.findOne({id: args.id});
       }
     },
     studentName: {
@@ -108,26 +97,18 @@ const RootQuery = new GraphQLObjectType({
         name: {type: GraphQLString}
       },
       resolve: (parent, args) => {
-        return new Promise(function(resolve, reject) {
-          Students.find({name: args.name}, function(err, data) {
-            resolve(data[0])
-          })
-        })
+        return Students.findOne({name: args.name}) 
       }
-    }
-  },
-  class: {
-    type: cls,
-    args: {
-      id: { type: GraphQLInt }
     },
-    type: GraphQLInt,
-    resolve: (parent, args) => {
-      return new Promise(function(resolve, reject) {
-        Classes.find({id: args.id}, function(err, data) {
-          resolve(data[0])
-        })
-      })
+    class: {
+      type: cls,
+      args: {
+        id: { type: GraphQLInt }
+      },
+      resolve: (parent, args) => {
+        return Classes.findOne({id: args.id})
+        
+      }
     }
   }
 });

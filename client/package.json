@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "apollo-boost": "^0.1.16",
+    "bootstrap4": "0.0.1-security",
+    "graphql": "^14.0.2",
+    "jquery": "^3.3.1",
     "react": "^16.5.2",
+    "react-apollo": "^2.2.4",
     "react-dom": "^16.5.2",
     "react-scripts": "2.0.5"
   },
@@ -11,7 +16,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start-server": "nodemon ../server/index.js"
   },
   "eslintConfig": {
     "extends": "react-app"
